@@ -1,0 +1,1 @@
+Selecione a unidade de medida em "Converter de" e em "Converter para". Adicione o valor que deseja converter no campo de texto. Em seguida, aperte "Enter". O valor convertido será exibido no campo logo abaixo.

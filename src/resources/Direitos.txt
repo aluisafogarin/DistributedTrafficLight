@@ -1,0 +1,15 @@
+Este PRODUTO DE SOFTWARE é fornecido por mim "como está" e "com todas as suas falhas", sem garantia de qualquer espécie, expressa ou implícita. Use-o por sua própria conta e risco. Não faço representações ou garantias de qualquer tipo em relação à segurança, adequação, ausência de vírus, imprecisões, erros tipográficos ou quaisquer outros componentes prejudiciais deste PRODUTO DE SOFTWARE. Existem perigos inerentes ao uso de qualquer software e você é o único responsável por determinar se este PRODUTO DE SOFTWARE é compatível com seu equipamento e outro software instalado em seu equipamento. Você também é o único responsável pela proteção de seu equipamento e backup de seus dados, e eu não serei responsável por quaisquer danos que você possa sofrer durante o uso, modificação ou distribuição deste PRODUTO DE SOFTWARE.
+
+Não dou nenhuma garantia de que:
+
+> o software atenderá aos seus requisitos;
+> o software será ininterrupto, oportuno, seguro ou livre de erros;
+> os resultados que podem ser obtidos com o uso do software serão eficazes, precisos ou confiáveis;
+> a qualidade do software atenderá às suas expectativas;
+> Quaisquer erros no software serão corrigidos.
+
+O software, amostra de código e sua documentação podem incluir erros técnicos ou outros, imprecisões ou erros tipográficos. Posso fazer alterações no software ou em sua documentação a qualquer momento, sem aviso prévio. Ele pode estar desatualizado e não me comprometo a atualizar esses materiais. Não assumo nenhuma responsabilidade por erros ou omissões no software ou em sua documentação.
+
+Em nenhuma circunstância serei responsável por você ou terceiros por quaisquer danos especiais, punitivos, incidentais, indiretos ou consequenciais de qualquer tipo, ou quaisquer danos, incluindo, sem limitação, aqueles resultantes de perda de uso, dados ou lucros, e em qualquer teoria de responsabilidade, decorrente de ou em conexão com o uso deste software.
+
+NÃO USE ESTE SOFTWARE EM NENHUMA SITUAÇÃO ONDE POSSA CAUSAR RISCO DE MORTE, LESÕES OU DANOS.

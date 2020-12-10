@@ -1,9 +1,14 @@
 package server;
 
+import gui.Infos;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Toolkit;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,9 +28,10 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
 {
 
     private ComponentCreator componentCreator = new ComponentCreator();
-    private JPanel panelWindow;
+    private JPanel mainPanel;
     private JPanel panelBottom;
 
+    private JLabel labelBottom;
     private JMenu menuFile;
     private JMenu menuHelp;
     private JMenuBar menuBar;
@@ -41,6 +47,11 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         super("Traffic Light Server");
         setWindow();
         setMenus();
+        setPanel();
+        setPanelBottom();
+        bindMenus();
+        bindPanel();
+        setupWindowsListener();
     }
 
     /**
@@ -50,9 +61,81 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     @Override
     public void actionPerformed(ActionEvent event) 
     {
+        if (event.getSource() == this.menuItemAbout) 
+        {
+            System.out.println("about");
+            new DialogWindow(this, "Sobre", Infos.getAbout());
+        }
 
+        if (event.getSource() == this.menuItemClose)
+            exit();
+
+        if (event.getSource() == this.menuItemDisclaimer) 
+        {
+            new DialogWindow(this, "Direitos" + Infos.getLongVersion(), 
+            Infos.getTextFromFile(Infos.DisclaimerFile));
+        }
+        
+        if (event.getSource() == this.menuItemHelp) 
+        {
+            new DialogWindow(this, "Ajuda" + Infos.getLongVersion(), 
+            Infos.getTextFromFile(Infos.HelpFile));
+        }
     }
 
+        /** 
+     * Makes easier to get events from items. 
+     * @param listener Event triggered.
+     * @param menu Name of menu.
+     */
+    public void bindItems(ActionListener listener, JMenu menu) 
+    {
+        for (Component c : menu.getMenuComponents()) 
+        {
+            if (c instanceof JMenuItem) 
+                ((JMenuItem) c).addActionListener(this);
+        }
+    }
+
+    /**
+     * Build menus
+     */
+    public void bindMenus() 
+    {
+        for (Component c : this.getJMenuBar().getComponents()) 
+        {
+            if (c instanceof JMenu) 
+                bindItems(this, (JMenu) c);
+        }
+    }
+
+    
+    /** 
+     * Makes easier to get events from items on panels.
+     * @param listener Event.
+     * @param panel Name of panel.
+     */
+    public void bindItemsPanel(ActionListener listener, JPanel panel) 
+    {
+        for (Component c : panel.getComponents()) 
+        {
+            if (c instanceof JTextField) 
+                ((JTextField) c).addActionListener(this);
+        }
+    } 
+
+    /**
+     * Builds panels.
+     */
+    public void bindPanel() 
+    {
+        for (Component c : this.getContentPane().getComponents()) 
+        {
+            if (c instanceof JPanel) 
+                bindItemsPanel(this, (JPanel) c);
+        }
+    }
+    
     public void exit()
     {
         System.exit(0);
@@ -69,7 +152,7 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
                 (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new GridLayout(4, 1));
+        this.setLayout(new BorderLayout(1,1));
     }
 
     private void setMenus()
@@ -103,11 +186,37 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
 
     private void setPanel()
     {
+        mainPanel = componentCreator.createPanel();
+        mainPanel.setBackground(Color.LIGHT_GRAY);
 
+        this.add(mainPanel, BorderLayout.CENTER);
     }
 
     private void setPanelBottom()
     {
+        panelBottom = componentCreator.createPanel();
+        panelBottom.setBackground(Color.GRAY);
+        panelBottom.setSize(10,10);
+
+        labelBottom = componentCreator.createLabel(componentCreator.getShortVersion(), 12);
+        
+        panelBottom.add(labelBottom);
+       
+        this.add(panelBottom, BorderLayout.SOUTH);
+
+        //labelBottom = componentCreator.createLabel()
 
     }
+
+    private void setupWindowsListener()
+      {
+        this.addWindowListener(new java.awt.event.WindowAdapter()
+            {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent)
+                {
+                    exit();
+                }
+            });
+      }
 }
