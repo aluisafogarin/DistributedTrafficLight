@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -32,6 +33,8 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private JPanel panelBottom;
 
     private JLabel labelBottom;
+    private JLabel labelOnlineLights;
+    private JLabel labelAllLights;
     private JMenu menuFile;
     private JMenu menuHelp;
     private JMenuBar menuBar;
@@ -63,7 +66,6 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     {
         if (event.getSource() == this.menuItemAbout) 
         {
-            System.out.println("about");
             new DialogWindow(this, "Sobre", Infos.getAbout());
         }
 
@@ -73,17 +75,17 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         if (event.getSource() == this.menuItemDisclaimer) 
         {
             new DialogWindow(this, "Direitos" + Infos.getLongVersion(), 
-            Infos.getTextFromFile(Infos.DisclaimerFile));
+                Infos.getTextFromFile(Infos.DisclaimerFile));
         }
         
         if (event.getSource() == this.menuItemHelp) 
         {
             new DialogWindow(this, "Ajuda" + Infos.getLongVersion(), 
-            Infos.getTextFromFile(Infos.HelpFile));
+                Infos.getTextFromFile("AjudaServidor.txt"));
         }
     }
 
-        /** 
+    /** 
      * Makes easier to get events from items. 
      * @param listener Event triggered.
      * @param menu Name of menu.
@@ -186,19 +188,24 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
 
     private void setPanel()
     {
-        mainPanel = componentCreator.createPanel();
+        //labelAllLights = componentCreator.createLabel("All Traffic Lights", 16, true);
+        labelOnlineLights = componentCreator.createLabel("On Traffic Lights", 16, true);
+
+        mainPanel = componentCreator.createPanel(3, 0, 0);
         mainPanel.setBackground(Color.LIGHT_GRAY);
+        
+        mainPanel.add(labelOnlineLights);
 
         this.add(mainPanel, BorderLayout.CENTER);
     }
 
     private void setPanelBottom()
     {
-        panelBottom = componentCreator.createPanel();
+        panelBottom = componentCreator.createPanel(3, 0, 0);
         panelBottom.setBackground(Color.GRAY);
         panelBottom.setSize(10,10);
 
-        labelBottom = componentCreator.createLabel(componentCreator.getShortVersion(), 12);
+        labelBottom = componentCreator.createLabel(componentCreator.getShortVersion(), 12, false);
         
         panelBottom.add(labelBottom);
        

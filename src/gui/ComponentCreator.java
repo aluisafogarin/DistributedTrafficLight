@@ -41,20 +41,31 @@ public class ComponentCreator extends JFrame
         return menuItem;
     }
 
-    public JPanel createPanel()
+    public JPanel createPanel(int typeLayout, int numCol, int numLin)
     {
+        // 1 = BorderLayout,  2 = GridLayout, 3 = FlowLayout,
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEtchedBorder());
-        panel.setLayout(new FlowLayout());
+        switch(typeLayout) 
+        {
+            case 1:
+                panel.setLayout(new BorderLayout());
+            case 2: 
+                panel.setLayout(new GridLayout(numCol, numLin));
+            case 3:
+                panel.setLayout(new FlowLayout());
+        }
 
         return panel;
     }
 
-    public JLabel createLabel(String text, int size)
+    public JLabel createLabel(String text, int size, boolean bold)
     {
         JLabel label = new JLabel(text);
+        if (bold)
+            label.setFont(new Font("Verdana", Font.BOLD, size));
+        else 
         label.setFont(new Font("Verdana", Font.PLAIN, size));
-
         return label;
     }
 

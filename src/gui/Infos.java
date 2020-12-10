@@ -15,10 +15,10 @@ public class Infos
     //private static final String ResFolder      = "/resources/";
     public static final String Authors = 
         "Ana Luisa Fogarin, Larissa Correia, Vinicius e Verussa de Alencar";
-        public static final String HelpFile       = "Ajuda.txt";
-    public static final String DisclaimerFile = "Direitos.txt";
+   /*  public static final String HelpFile       = "Ajuda.txt";*/
+    public static final String DisclaimerFile = "Direitos.txt"; 
     public static final String Sep = System.getProperty("file.separator");
-    public static final String Path = System.getProperty("user.dir") + Sep + "UnitConverter" + Sep 
+    public static final String Path = System.getProperty("user.dir") + Sep + "TrafficLight" + Sep 
     + "src" + "/resources/";
 
     public static String getAbout()
@@ -36,26 +36,25 @@ public class Infos
 
     public static String getDisclaimerText()
     {
-        System.out.println(getTextFromFile(DisclaimerFile));
         return (getTextFromFile(DisclaimerFile));
     }
 
-    public static String getHelpText()
+    public static String getHelpText(String file)
     {
-        System.out.println(getTextFromFile(HelpFile));
-        return (getTextFromFile(HelpFile));
+        return (getTextFromFile(file));
     }
 
     public static String getTextFromFile(String fileName)
     {
         StringBuilder fileText = new StringBuilder();
+        System.out.println(Path);
         try (BufferedReader reader = new BufferedReader(new FileReader(Path + fileName)))
         {
             String buffer = "";
 
             while ((buffer = reader.readLine()) != null) 
             {
-                fileText.append(buffer);
+                fileText.append((buffer + "\n"));
             }
         }
         catch (NullPointerException e)
