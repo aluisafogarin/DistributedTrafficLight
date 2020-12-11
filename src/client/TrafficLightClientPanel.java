@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,6 +52,13 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         bindPanel();
         setupWindowsListener();
     }
+
+    @Override
+    public void paint(Graphics g)
+    {
+        super.paint(g);
+        componentCreator.drawRectangle(g, mainPanel.getSize());
+    } 
 
     /**
      * Overrides actionPerformed from ActionListener to implement functionalities
@@ -142,11 +151,13 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
 
     private void setWindow() 
     {
-        this.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5),
-                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5));
+        /* this.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2),
+                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5)); */
+        this.setSize(250, 350);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout(1,1));
+        this.setResizable(false);
     }
 
     private void setMenus()
@@ -176,6 +187,8 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     {
         mainPanel = componentCreator.createPanel(1, 1, 1);
         panelBottom = componentCreator.createPanelBottom();
+        
+        this.add(mainPanel, BorderLayout.CENTER);
         this.add(panelBottom, BorderLayout.SOUTH);
     }
 
