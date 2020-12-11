@@ -1,6 +1,7 @@
 package server;
 
 import gui.Infos;
+import gui.DialogWindow;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -18,7 +19,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import gui.ComponentCreator;
 
@@ -32,7 +32,6 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private JPanel mainPanel;
     private JPanel panelBottom;
 
-    private JLabel labelBottom;
     private JLabel labelOnlineLights;
     private JLabel labelAllLights;
     private JMenu menuFile;
@@ -51,7 +50,6 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         setWindow();
         setMenus();
         setPanel();
-        setPanelBottom();
         bindMenus();
         bindPanel();
         setupWindowsListener();
@@ -178,17 +176,10 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         menuBar.add(menuHelp);
 
         this.setJMenuBar(menuBar);
-
-    }
-
-    private void setLayout()
-    {
-
     }
 
     private void setPanel()
     {
-        //labelAllLights = componentCreator.createLabel("All Traffic Lights", 16, true);
         labelOnlineLights = componentCreator.createLabel("On Traffic Lights", 16, true);
 
         mainPanel = componentCreator.createPanel(3, 0, 0);
@@ -197,26 +188,13 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         mainPanel.add(labelOnlineLights);
 
         this.add(mainPanel, BorderLayout.CENTER);
-    }
 
-    private void setPanelBottom()
-    {
-        panelBottom = componentCreator.createPanel(3, 0, 0);
-        panelBottom.setBackground(Color.GRAY);
-        panelBottom.setSize(10,10);
-
-        labelBottom = componentCreator.createLabel(componentCreator.getShortVersion(), 12, false);
-        
-        panelBottom.add(labelBottom);
-       
+        panelBottom = componentCreator.createPanelBottom();
         this.add(panelBottom, BorderLayout.SOUTH);
-
-        //labelBottom = componentCreator.createLabel()
-
     }
 
     private void setupWindowsListener()
-      {
+    {
         this.addWindowListener(new java.awt.event.WindowAdapter()
             {
             @Override
@@ -225,5 +203,5 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
                     exit();
                 }
             });
-      }
+    }
 }

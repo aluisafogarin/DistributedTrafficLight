@@ -1,4 +1,4 @@
-package server;
+package gui;
 
 import gui.Infos;
 import java.awt.BorderLayout;
@@ -31,7 +31,7 @@ public class DialogWindow extends JDialog implements ActionListener {
     private final JPanel panelButton;
     private final JScrollPane scroll;
 
-    DialogWindow(JFrame owner, String title, String msg) throws HeadlessException {
+    public DialogWindow(JFrame owner, String title, String msg) throws HeadlessException {
         super(owner, title);
         setSize(900, 400);
         setResizable(false);
@@ -62,8 +62,8 @@ public class DialogWindow extends JDialog implements ActionListener {
         this.setVisible(true);
     }
 
-    
-    /** 
+
+	/** 
      * Set the window visible.
      * @param arg0
      */

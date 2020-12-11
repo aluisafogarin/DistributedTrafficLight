@@ -1,13 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -16,15 +13,27 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+
 
 public class ComponentCreator extends JFrame
 {
 
+    private JPanel mainPanel;
+    private JPanel panelBottom;
+
+    private JLabel labelBottom;
+    private JLabel labelOnlineLights;
+    private JMenu menuFile;
+    private JMenu menuHelp;
+    private JMenuBar menuBar;
+    private JMenuItem menuItemAbout;
+    private JMenuItem menuItemClose;
+    private JMenuItem menuItemDisclaimer;
+    private JMenuItem menuItemHelp;
+
     private static final long serialVersionUID = 1L;
     private static String shortVersion = "Traffic Light Controler";
-    
+
     public JMenu createMenu(String text, char shortcut)
     {
         JMenu menu = new JMenu(text);
@@ -32,6 +41,7 @@ public class ComponentCreator extends JFrame
 
         return menu;
     }
+
 
     public JMenuItem createMenuItem(String text, char shortcut)
     {
@@ -59,6 +69,19 @@ public class ComponentCreator extends JFrame
         return panel;
     }
 
+    public JPanel createPanelBottom() 
+    {   
+        panelBottom = new JPanel();
+        panelBottom.setBackground(Color.GRAY);
+        panelBottom.setSize(10,10);
+
+        labelBottom = createLabel(getShortVersion(), 12, false);
+        
+        panelBottom.add(labelBottom);
+
+        return panelBottom;
+    }
+    
     public JLabel createLabel(String text, int size, boolean bold)
     {
         JLabel label = new JLabel(text);
@@ -73,4 +96,5 @@ public class ComponentCreator extends JFrame
     {
         return shortVersion;
     }
+
 }

@@ -47,7 +47,6 @@ public class Infos
     public static String getTextFromFile(String fileName)
     {
         StringBuilder fileText = new StringBuilder();
-        System.out.println(Path);
         try (BufferedReader reader = new BufferedReader(new FileReader(Path + fileName)))
         {
             String buffer = "";
