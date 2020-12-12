@@ -5,7 +5,7 @@ package server;
  */
 public class TrafficLightServerWindow 
 {
-    public static void main(String[] args) 
+    public static void startGUI()
     {
         try 
         {
