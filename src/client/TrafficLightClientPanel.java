@@ -1,6 +1,7 @@
 package client;
 
 import gui.Infos;
+import gui.TrafficLight;
 import gui.DialogWindow;
 
 import java.awt.BorderLayout;
@@ -57,7 +58,23 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     public void paint(Graphics g)
     {
         super.paint(g);
-        componentCreator.drawRectangle(g, mainPanel.getSize());
+        TrafficLight createTraffic = new TrafficLight(g);
+        createTraffic.drawRectangle(mainPanel.getSize());
+        //componentCreator.drawRectangle(g, mainPanel.getSize());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        createTraffic.drawCircle(1);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        createTraffic.drawCircle(2);
     } 
 
     /**
