@@ -1,4 +1,4 @@
-package gui;
+package common;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

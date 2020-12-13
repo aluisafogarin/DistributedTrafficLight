@@ -12,8 +12,8 @@ public class MainServer {
         TrafficLightServerWindow.startGUI();
         try 
         {
-            ServerUDP server = new ServerUDP(17);
-            server.service();
+            ServerUDP server = new ServerUDP();
+            server.listenSocket();
         } 
         catch (SocketException e) 
         {

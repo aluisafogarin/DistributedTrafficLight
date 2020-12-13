@@ -17,17 +17,22 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-public class TrafficLight extends JFrame {
+public class TrafficLight extends JFrame 
+{
     private static final long serialVersionUID = 1L;
     private Graphics2D canvas;
+    private Dimension dimensionPanel;
 
-    public TrafficLight(Graphics g) {
+    public TrafficLight(Graphics g, Dimension dimension) 
+    {
         this.canvas = (Graphics2D) g;
+        this.dimensionPanel = dimension;
     }
 
-    public void drawRectangle(Dimension dimension) {
-        int widthPanel = (int) dimension.getWidth();
-        int heightPanel = (int) dimension.getHeight();
+    public void drawRectangle() 
+    {
+        int widthPanel = (int) dimensionPanel.getWidth();
+        int heightPanel = (int) dimensionPanel.getHeight();
 
         /*
          * int xPoint = (int) (widthPanel / 3); int yPoint = (int) (heightPanel * .33);

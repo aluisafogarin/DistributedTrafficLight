@@ -1,6 +1,6 @@
 package client;
 
-import gui.Infos;
+import common.Infos;
 import gui.TrafficLight;
 import gui.DialogWindow;
 
@@ -58,8 +58,8 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     public void paint(Graphics g)
     {
         super.paint(g);
-        TrafficLight createTraffic = new TrafficLight(g);
-        createTraffic.drawRectangle(mainPanel.getSize());
+        TrafficLight createTraffic = new TrafficLight(g, mainPanel.getSize());
+        createTraffic.drawRectangle();
         //componentCreator.drawRectangle(g, mainPanel.getSize());
         try {
             Thread.sleep(3000);

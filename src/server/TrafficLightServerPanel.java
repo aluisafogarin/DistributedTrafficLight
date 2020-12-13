@@ -1,6 +1,6 @@
 package server;
 
-import gui.Infos;
+import common.Infos;
 import gui.DialogWindow;
 import java.awt.BorderLayout;
 import java.awt.Component;

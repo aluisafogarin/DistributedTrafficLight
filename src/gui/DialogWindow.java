@@ -1,6 +1,6 @@
 package gui;
 
-import gui.Infos;
+import common.Infos;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
