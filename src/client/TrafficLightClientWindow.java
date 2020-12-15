@@ -5,11 +5,13 @@ package client;
  */
 public class TrafficLightClientWindow 
 {
-    public static void startGUI() 
+    private TrafficLightClientPanel clientWindow;
+
+    public TrafficLightClientWindow()
     {
         try 
         {
-            TrafficLightClientPanel clientWindow = new TrafficLightClientPanel();
+            this.clientWindow = new TrafficLightClientPanel();
             clientWindow.start();
         }
         catch (Exception exception)
@@ -18,6 +20,11 @@ public class TrafficLightClientWindow
             exception.printStackTrace();
             System.exit(1);
         }
+    }
+
+    public TrafficLightClientPanel getPanelClient()
+    {
+        return clientWindow;
     }
     
 }

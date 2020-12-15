@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 import common.SystemParameters;
-import common.TrafficLightStatus;
+import common.TrafficLightState;
 import gui.TrafficLight;
 
 public class ServerUDP 
@@ -45,7 +45,7 @@ public class ServerUDP
 
                 try
                 {
-                    TrafficLightStatus light = (TrafficLightStatus) objectInput.readObject();
+                    TrafficLightState light = (TrafficLightState) objectInput.readObject();
                     System.out.println("Light recieved " + light);
                 }
                 catch (ClassNotFoundException e)

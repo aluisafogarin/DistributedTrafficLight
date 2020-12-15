@@ -12,7 +12,7 @@ public class MainClient
 
     public static void start()
     {
-        TrafficLightClientWindow.startGUI();
+       
         try 
         {
             ClientUDP server = new ClientUDP(17);

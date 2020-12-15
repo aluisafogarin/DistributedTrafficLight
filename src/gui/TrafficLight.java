@@ -53,10 +53,21 @@ public class TrafficLight extends JFrame
         canvas.drawRect(xPoint, yPoint, width, height);
         canvas.fillRect(xPoint, yPoint, width, height);
 
-        drawCircle(3);
     }
 
-    public void drawCircle(int state)
+    public void drawLights()
+    {
+        canvas.setColor(Color.GREEN);
+        canvas.drawOval(103, 100, 50, 50);
+
+        canvas.setColor(Color.YELLOW);
+        canvas.drawOval(103, 162, 50, 50);
+
+        canvas.setColor(Color.RED);
+        canvas.drawOval(103, 224, 50, 50);
+    }
+
+    public void setLightColor(int state)
     {
         switch(state)
         {
@@ -91,13 +102,5 @@ public class TrafficLight extends JFrame
                 canvas.fillOval(103, 162, 51, 51);
                 break;   
         }
-        canvas.setColor(Color.GREEN);
-        canvas.drawOval(103, 100, 50, 50);
-
-        canvas.setColor(Color.YELLOW);
-        canvas.drawOval(103, 162, 50, 50);
-
-        canvas.setColor(Color.RED);
-        canvas.drawOval(103, 224, 50, 50);
     }
 }

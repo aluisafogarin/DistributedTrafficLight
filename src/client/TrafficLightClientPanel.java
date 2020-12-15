@@ -41,6 +41,9 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     private JMenuItem menuItemDisclaimer;
     private JMenuItem menuItemHelp;
 
+    private TrafficLight trafficLight;
+    private boolean statusTraffic; 
+
     private static final long serialVersionUID = 1L;
 
     TrafficLightClientPanel() 
@@ -58,23 +61,13 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     public void paint(Graphics g)
     {
         super.paint(g);
-        TrafficLight createTraffic = new TrafficLight(g, mainPanel.getSize());
-        createTraffic.drawRectangle();
-        //componentCreator.drawRectangle(g, mainPanel.getSize());
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        createTraffic.drawCircle(1);
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        createTraffic.drawCircle(2);
+        System.out.println("to no paint");
+
+        trafficLight = new TrafficLight(g, mainPanel.getSize());
+        trafficLight.drawRectangle();
+        System.out.println(ClientUDP.getState());
+        trafficLight.setLightColor(ClientUDP.getState());
+        trafficLight.drawLights();
     } 
 
     /**
