@@ -7,6 +7,7 @@ public class TrafficLightState implements Serializable
 
     private static final long serialVersionUID = 1L;
     private int state;
+    private boolean status;
 
     public TrafficLightState()
     {
@@ -37,5 +38,20 @@ public class TrafficLightState implements Serializable
     public int getState()
     {
         return state;
+    }
+
+    public boolean getStatus()
+    {
+        return status;
+    }
+    
+    public void setOnline()
+    {
+        status = true;
+    }
+
+    public void setOffline()
+    {
+        status = false;
     }
 }

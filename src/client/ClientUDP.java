@@ -48,30 +48,30 @@ public class ClientUDP
             dataSocket.send(sendPacket);
             System.out.println("Message sent from client");
 
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            light.changeState(state);
-            state = light.getState();
-            updateLight(clientWindow);
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            light.changeState(state);
-            updateLight(clientWindow);
-            state = light.getState();
-
             DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
             dataSocket.receive(incomingPacket);
             String response = new String(incomingPacket.getData());
             System.out.println("Response from server:" + response);
-            Thread.sleep(2000);
+            Thread.sleep(1000);
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            light.changeState(state);
+            state = light.getState();
+            updateLight(clientWindow);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            light.changeState(state);
+            updateLight(clientWindow);
+            state = light.getState();
 
         } catch (SocketTimeoutException e) {
             System.out.println("Timeout error: " + e.getMessage());

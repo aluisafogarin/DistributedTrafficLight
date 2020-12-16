@@ -29,6 +29,7 @@ public class ServerUDP
 
     public void listenSocket()
     {
+        TrafficLightState receivedObject;
         try
         {
             while (true)
@@ -43,23 +44,26 @@ public class ServerUDP
                 ByteArrayInputStream input = new ByteArrayInputStream(data);
                 ObjectInputStream objectInput = new ObjectInputStream(input);
 
-                try
-                {
-                    TrafficLightState light = (TrafficLightState) objectInput.readObject();
-                    System.out.println("Light recieved " + light);
-                }
-                catch (ClassNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
+                receivedObject = (TrafficLightState) objectInput.readObject();
+                System.out.println("Object light recieved: " + receivedObject);
+                receivedObject.setOnline();
+
+
                 String reply = "Thank you";
                 byte[] replyBeta = reply.getBytes();
                 
                 DatagramPacket replyPacket = new DatagramPacket
                     (replyBeta, replyBeta.length, clientAddress, clientPort);
                 dataSocket.send(replyPacket);
-                Thread.sleep(2000);
-                System.exit(0);
+                Thread.sleep(1000);
+
+                while (receivedObject.getStatus() == true)
+                {
+                    int state = ((TrafficLightState) objectInput.readObject()).getState();
+                    System.out.println("RECEBI ESSE ESTADO: " + state);
+                    Thread.sleep(3000);
+                    
+                }
             }
         }
         catch (SocketException e)
@@ -71,6 +75,10 @@ public class ServerUDP
             e.printStackTrace();
         }
         catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
