@@ -42,11 +42,13 @@ public class TrafficLightState implements Serializable
 
     public boolean getStatus()
     {
+        
         return status;
     }
     
     public void setOnline()
     {
+        System.out.println("Set online");
         status = true;
     }
 

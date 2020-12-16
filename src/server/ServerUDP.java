@@ -1,8 +1,10 @@
 package server;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -45,25 +47,36 @@ public class ServerUDP
                 ObjectInputStream objectInput = new ObjectInputStream(input);
 
                 receivedObject = (TrafficLightState) objectInput.readObject();
-                System.out.println("Object light recieved: " + receivedObject);
+                System.out.println("Object received from Client: " + receivedObject);
                 receivedObject.setOnline();
 
-
-                String reply = "Thank you";
+/*                 String reply = "Thank you";
                 byte[] replyBeta = reply.getBytes();
                 
                 DatagramPacket replyPacket = new DatagramPacket
                     (replyBeta, replyBeta.length, clientAddress, clientPort);
                 dataSocket.send(replyPacket);
-                Thread.sleep(1000);
+                Thread.sleep(1000); */
 
-                while (receivedObject.getStatus() == true)
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ObjectOutputStream os = new ObjectOutputStream(outputStream);
+                os.writeObject(receivedObject);
+    
+                byte[] dataOut = outputStream.toByteArray();
+                DatagramPacket sendPacket = 
+                    new DatagramPacket(dataOut, dataOut.length, clientAddress, clientPort);
+                dataSocket.send(sendPacket);
+                System.out.println("Acabei de enviar para o cliente: " + dataOut);
+
+/*                 while (receivedObject.getStatus() == true)
                 {
-                    int state = ((TrafficLightState) objectInput.readObject()).getState();
+                    System.out.println("to no while");
+                    //int state = ((TrafficLightState) objectInput.readObject()).getState();
+                    int state = receivedObject.getState();
                     System.out.println("RECEBI ESSE ESTADO: " + state);
                     Thread.sleep(3000);
                     
-                }
+                } */
             }
         }
         catch (SocketException e)
@@ -74,10 +87,10 @@ public class ServerUDP
         {
             e.printStackTrace();
         }
-        catch (InterruptedException e)
+/*         catch (InterruptedException e)
         {
             e.printStackTrace();
-        }
+        } */
         catch (ClassNotFoundException e)
         {
             e.printStackTrace();
