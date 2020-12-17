@@ -44,6 +44,8 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     private TrafficLight trafficLight;
     private boolean statusTraffic; 
 
+    private int state;
+
     private static final long serialVersionUID = 1L;
 
     TrafficLightClientPanel() 
@@ -61,14 +63,17 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     public void paint(Graphics g)
     {
         super.paint(g);
-        System.out.println("to no paint");
 
         trafficLight = new TrafficLight(g, mainPanel.getSize());
         trafficLight.drawRectangle();
-        System.out.println(ClientUDP.getState());
-        trafficLight.setLightColor(ClientUDP.getState());
+        trafficLight.setLightColor(state);
         trafficLight.drawLights();
     } 
+
+    public void setState(int state) 
+    {
+        this.state = state;
+    }
 
     /**
      * Overrides actionPerformed from ActionListener to implement functionalities

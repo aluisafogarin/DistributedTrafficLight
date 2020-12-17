@@ -14,96 +14,65 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 
-import common.TrafficLightState;
+import common.NetworkParams;
+import common.SystemParameters;
 import gui.TrafficLight;
 
 public class ClientUDP 
 {
     private final String hostname;
     private int port;
-    private static int state;
     private byte[] incomingData;
+    private NetworkParams params;
 
-    public ClientUDP(int port) throws IOException 
+    public ClientUDP() throws IOException 
     {
-        this.hostname = "localhost";
-        this.port = port;
+        this.hostname = SystemParameters.getHostname();
+        this.port = SystemParameters.getPort();
         this.incomingData = new byte[1024];
+        this.params = new NetworkParams();
         cliente();
     }
 
     public void cliente() {
         try {
             TrafficLightClientWindow clientWindow = new TrafficLightClientWindow();
-            InetAddress address = InetAddress.getByName(hostname);
-            System.out.println(address);
-            DatagramSocket dataSocket = new DatagramSocket();
-            byte[] incomingData = new byte[1024];
-            
-            TrafficLightState light = new TrafficLightState();
-
-            state = light.getState();
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ObjectOutputStream os = new ObjectOutputStream(outputStream);
-            os.writeObject(light);
-
-            byte[] data = outputStream.toByteArray();
-            DatagramPacket sendPacket = new DatagramPacket(data, data.length, address, port);
-
-            dataSocket.send(sendPacket);
-            System.out.println("Message sent from client: " + sendPacket);
-
-            /* Reading object send from Server */
-            DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
-            dataSocket.receive(incomingPacket);
-
-            //InetAddress clientAddress = incomingPacket.getAddress();
-            //int clientPort = incomingPacket.getPort();
-
-            byte[] dataIncoming = incomingPacket.getData();
-            ByteArrayInputStream input = new ByteArrayInputStream(dataIncoming);
-            ObjectInputStream objectInput = new ObjectInputStream(input);
-
-            TrafficLightState receivedObject = (TrafficLightState) objectInput.readObject();
-            System.out.println("Object received from Server: " + receivedObject);
-            System.out.println("Estado do objeto recebido: " + receivedObject.getStatus());
-/*             DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
-            dataSocket.receive(incomingPacket);
-            String response = new String(incomingPacket.getData());
-            System.out.println("Response from server:" + response);
-            Thread.sleep(1000); */
-
-/*             ServerSocket socket = new ServerSocket(port);
-            Socket sock = socket.accept();
-            ObjectInputStream is = new ObjectInputStream(
-                new BufferedInputStream(sock.getInputStream()));
-            TrafficLightState receivedObject = (TrafficLightState) is.readObject();
-            System.out.println("Recebi algo:" + receivedObject);
-            System.out.println("Estado do objeto recebido: " + receivedObject.getStatus());
-            socket.close(); */
-
-            /* ByteArrayInputStream input = new ByteArrayInputStream(incomingData);
-            ObjectInputStream objectInput = new ObjectInputStream(input);
-            TrafficLightState receivedObject = (TrafficLightState) objectInput.readObject();
-            System.out.println("RECEBI ALGO: " + receivedObject);
-            System.out.println("Esse é o estado do objeto que recebi:" + receivedObject.getStatus()); */
-
-/*             System.out.println("status:" + light.getStatus());
-            while (light.getStatus() == true)
+            while (true) 
             {
-                try 
-                {
-                    Thread.sleep(3000);
-                } 
-                catch (InterruptedException e) 
-                {
-                    e.printStackTrace();
-                }
-                light.changeState(state);
-                state = light.getState();
+                System.out.println("--- CLIENT ---");
+                InetAddress address = InetAddress.getByName(hostname);
+                System.out.println(address);
+                DatagramSocket dataSocket = new DatagramSocket();
+                byte[] incomingData = new byte[1024];
+
+                /* Sending object to server */
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ObjectOutputStream os = new ObjectOutputStream(outputStream);
+                os.writeObject(params);
+
+                byte[] data = outputStream.toByteArray();
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, address, port);
+
+                dataSocket.send(sendPacket);
+                System.out.println("Datagram send to server: " + sendPacket);
+                System.out.println("State send: " + params.getState());
+
+                /* Receiving object from server */
+                DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
+                dataSocket.receive(incomingPacket);
+
+                byte[] dataIncoming = incomingPacket.getData();
+                ByteArrayInputStream input = new ByteArrayInputStream(dataIncoming);
+                ObjectInputStream objectInput = new ObjectInputStream(input);
+
+                NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
+                System.out.println("Datagram received from server: " + receivedObject);
+                System.out.println("State received: " + receivedObject.getState());
+
+                dataSocket.close();
+                params.setState(receivedObject.getState());
                 updateLight(clientWindow);
-            } */
+            }
         } 
         catch (SocketTimeoutException e) 
         {
@@ -115,10 +84,6 @@ public class ClientUDP
             System.out.println("Client error: " + e.getMessage());
             e.printStackTrace();
         } 
-/*         catch (InterruptedException e) 
-        {
-            e.printStackTrace();
-        } */
         catch (ClassNotFoundException e)
         {
             e.printStackTrace();
@@ -128,10 +93,8 @@ public class ClientUDP
     public void updateLight(TrafficLightClientWindow clientWindow)
     {
         TrafficLightClientPanel clientGUI = clientWindow.getPanelClient();
+        clientGUI.setState(params.getState());
         clientGUI.repaint();
     }
 
-    public static int getState() {
-        return state;
-    }
 }   

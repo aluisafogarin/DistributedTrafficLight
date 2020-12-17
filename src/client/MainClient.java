@@ -15,7 +15,7 @@ public class MainClient
        
         try 
         {
-            ClientUDP server = new ClientUDP(17);
+            ClientUDP server = new ClientUDP();
         } 
         catch (SocketException e) 
         {

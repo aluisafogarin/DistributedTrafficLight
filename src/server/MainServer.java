@@ -2,9 +2,13 @@ package server;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class MainServer {
-    public static void main(String[] args) {
+public class MainServer 
+{
+    public static void main(String[] args) 
+    {
         start();
     }
 
@@ -13,7 +17,7 @@ public class MainServer {
         try 
         {
             ServerUDP server = new ServerUDP();
-            server.listenSocket();
+            server.execute();
         } 
         catch (SocketException e) 
         {
