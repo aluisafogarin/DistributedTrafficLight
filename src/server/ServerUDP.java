@@ -45,7 +45,7 @@ public class ServerUDP
                 {
                     try
                     {
-                        listenSocket();
+                        server();
                     }
                     catch (Exception e)
                     {
@@ -56,82 +56,69 @@ public class ServerUDP
             timer.schedule(task, TIME, TIME);
         }
     }
-    public void listenSocket()
+
+    public NetworkParams receive(DatagramPacket incomingPacket)
+        throws IOException, ClassNotFoundException
     {
-        NetworkParams receivedObject;
-        try
+        dataSocket.receive(incomingPacket); 
+        
+        byte[] data = incomingPacket.getData();
+       
+        ByteArrayInputStream input = new ByteArrayInputStream(data);
+        ObjectInputStream objectInput = new ObjectInputStream(input);
+
+        NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
+        System.out.println("Received from client: " + receivedObject);
+        System.out.println("Current state: " + receivedObject.getState());
+        receivedObject.setOnline();
+
+        return receivedObject;
+    }
+
+    public boolean server()
+    {
+        boolean check = false;
+        try 
         {
-            while (true)
-            {
-                System.out.println("--- SERVER ---");
-                /* Receiving object from client */
-                DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
-                dataSocket.receive(incomingPacket);
+            System.out.println("--- SERVER ---");
+            DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
 
-                InetAddress clientAddress = incomingPacket.getAddress();
-                int clientPort = incomingPacket.getPort();
+/*             InetAddress clientAddress = incomingPacket.getAddress();
+            int clientPort = incomingPacket.getPort(); */
+            NetworkParams receivedObject = receive(incomingPacket);
 
-                byte[] data = incomingPacket.getData();
-                ByteArrayInputStream input = new ByteArrayInputStream(data);
-                ObjectInputStream objectInput = new ObjectInputStream(input);
+            receivedObject.setState(changeState(receivedObject.getState()));
+            System.out.println("New state: " + receivedObject.getState());
 
-                receivedObject = (NetworkParams) objectInput.readObject();
-                System.out.println("Received from client: " + receivedObject);
-                System.out.println("Current state: " + receivedObject.getState());
-                receivedObject.setOnline();
-
-                Thread.sleep(SystemParameters.getTime());
-                receivedObject.setState(changeState(receivedObject.getState()));
-                System.out.println("New state: " + receivedObject.getState());
-                
-                /* Sending object to client */
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                ObjectOutputStream os = new ObjectOutputStream(outputStream);
-                os.writeObject(receivedObject);
-    
-                byte[] dataOut = outputStream.toByteArray();
-                DatagramPacket sendPacket = 
-                    new DatagramPacket(dataOut, dataOut.length, clientAddress, clientPort);
-                dataSocket.send(sendPacket);
-                System.out.println("Send to client: " + dataOut);
-            }
-        }
-        catch (SocketException e)
-        {
-            e.printStackTrace();
+            send(receivedObject, incomingPacket);
+            if (incomingPacket != null)
+                check = true;
         }
         catch (IOException e)
-        {
-            e.printStackTrace();
+        {   
+            System.out.println(e.getMessage());
         }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        } 
         catch (ClassNotFoundException e)
         {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        
+        return check;
     }
-/*     protected void service() throws IOException
+
+    public void send(NetworkParams receivedObject, DatagramPacket incomingPacket) throws IOException
     {
-        while(true)
-        {
-            DatagramPacket request = new DatagramPacket(new byte[1], 1);
-            dataSocket.receive(request);
+        /* Sending object to client */
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(outputStream);
+        os.writeObject(receivedObject);
 
-
-            InetAddress clientAddress = request.getAddress();
-            int clientPort = request.getPort();
-
-            String quote = "Mensagem de teste";
-            byte[] buffer = quote.getBytes();
-
-            DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
-            dataSocket.send(response);
-            //System.out.println("TO NO SERVIDOR");
-        }
-    } */
+        byte[] dataOut = outputStream.toByteArray();
+        DatagramPacket sendPacket = 
+            new DatagramPacket(dataOut, dataOut.length, incomingPacket.getAddress(), incomingPacket.getPort());
+        dataSocket.send(sendPacket);
+        System.out.println("Send to client: " + dataOut);
+    }
 
     public int changeState(int currentState)
     {

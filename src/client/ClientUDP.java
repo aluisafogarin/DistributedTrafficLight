@@ -34,6 +34,38 @@ public class ClientUDP
         cliente();
     }
 
+    public NetworkParams receive(DatagramSocket dataSocket) throws IOException, ClassNotFoundException
+    {
+        /* Receiving object from server */
+        DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
+        dataSocket.receive(incomingPacket);
+
+        byte[] dataIncoming = incomingPacket.getData();
+        ByteArrayInputStream input = new ByteArrayInputStream(dataIncoming);
+        ObjectInputStream objectInput = new ObjectInputStream(input);
+
+        NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
+        System.out.println("Datagram received from server: " + receivedObject);
+        System.out.println("State received: " + receivedObject.getState());
+
+        return receivedObject;
+    }
+
+    public void send(DatagramSocket dataSocket, InetAddress address) throws IOException
+    {
+        /* Sending object to server */
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(outputStream);
+        os.writeObject(params);
+
+        byte[] data = outputStream.toByteArray();
+        DatagramPacket sendPacket = new DatagramPacket(data, data.length, address, port);
+
+        dataSocket.send(sendPacket);
+        System.out.println("Datagram send to server: " + sendPacket);
+        System.out.println("State send: " + params.getState());
+    }
+
     public void cliente() {
         try {
             TrafficLightClientWindow clientWindow = new TrafficLightClientWindow();
@@ -45,30 +77,9 @@ public class ClientUDP
                 DatagramSocket dataSocket = new DatagramSocket();
                 byte[] incomingData = new byte[1024];
 
-                /* Sending object to server */
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                ObjectOutputStream os = new ObjectOutputStream(outputStream);
-                os.writeObject(params);
-
-                byte[] data = outputStream.toByteArray();
-                DatagramPacket sendPacket = new DatagramPacket(data, data.length, address, port);
-
-                dataSocket.send(sendPacket);
-                System.out.println("Datagram send to server: " + sendPacket);
-                System.out.println("State send: " + params.getState());
-
-                /* Receiving object from server */
-                DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
-                dataSocket.receive(incomingPacket);
-
-                byte[] dataIncoming = incomingPacket.getData();
-                ByteArrayInputStream input = new ByteArrayInputStream(dataIncoming);
-                ObjectInputStream objectInput = new ObjectInputStream(input);
-
-                NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
-                System.out.println("Datagram received from server: " + receivedObject);
-                System.out.println("State received: " + receivedObject.getState());
-
+                send(dataSocket, address);
+                NetworkParams receivedObject = receive(dataSocket);
+                
                 dataSocket.close();
                 params.setState(receivedObject.getState());
                 updateLight(clientWindow);
