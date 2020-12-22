@@ -21,8 +21,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
 
 import gui.ComponentCreator;
 
@@ -37,7 +41,6 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private JPanel panelBottom;
 
     private JLabel labelOnlineLights;
-    private JLabel labelAllLights;
     private JMenu menuFile;
     private JMenu menuHelp;
     private JMenuBar menuBar;
@@ -45,6 +48,11 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private JMenuItem menuItemClose;
     private JMenuItem menuItemDisclaimer;
     private JMenuItem menuItemHelp;
+    private JLabel clientId;
+    private JLabel clientState;
+    private JLabel clientIdTitle;
+    private JLabel clientStateTitle;
+    private JTextArea clientInfo;
 
     private TrafficLight trafficLight;
 
@@ -159,6 +167,7 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout(1,1));
+        
     }
 
     private void setMenus()
@@ -197,15 +206,22 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
 
     private void setPanel()
     {
-        labelOnlineLights = componentCreator.createLabel("On Traffic Lights", 16, true);
+        labelOnlineLights = componentCreator.createLabel("On Traffic Lights", 16, true, "CENTER");
 
-        mainPanel = componentCreator.createPanel(3, 0, 0);
+        mainPanel = componentCreator.createPanel(1, 1, 1);
         mainPanel.setBackground(Color.LIGHT_GRAY);
+
+        JPanel conteiner = componentCreator.createPanel(2, 1, 2);
+
+        clientInfo = componentCreator.createTextArea();
+        clientInfo.setText("Client ID: 10 - Status: RED");
+        conteiner.add(clientInfo);
         
-        mainPanel.add(labelOnlineLights);
+        mainPanel.add(labelOnlineLights, BorderLayout.NORTH);
+        mainPanel.add(conteiner, BorderLayout.CENTER); 
 
         this.add(mainPanel, BorderLayout.CENTER);
-
+        
         panelBottom = componentCreator.createPanelBottom();
         this.add(panelBottom, BorderLayout.SOUTH);
     }

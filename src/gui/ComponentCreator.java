@@ -1,13 +1,13 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;  
+
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -16,6 +16,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 
 public class ComponentCreator extends JFrame
@@ -57,7 +59,8 @@ public class ComponentCreator extends JFrame
         return menuItem;
     }
 
-    public JPanel createPanel(int typeLayout, int numCol, int numLin)
+
+    public JPanel createPanel(int typeLayout, int numRow, int numCol)
     {
         // 1 = BorderLayout,  2 = GridLayout, 3 = FlowLayout,
         JPanel panel = new JPanel();
@@ -66,14 +69,27 @@ public class ComponentCreator extends JFrame
         switch(typeLayout) 
         {
             case 1:
-                panel.setLayout(new BorderLayout(numCol, numLin));
+                panel.setLayout(new BorderLayout(numRow, numCol));
+                break;
             case 2: 
-                panel.setLayout(new GridLayout(numCol, numLin));
+                panel.setLayout(new GridLayout(numRow, numCol));
+                System.out.println(numRow + numCol);
+                break;
             case 3:
                 panel.setLayout(new FlowLayout());
+                break;
         }
 
         return panel;
+    }
+
+    public JTextArea createTextArea()
+    {
+        JTextArea textArea = new JTextArea();
+        textArea.setBackground(Color.LIGHT_GRAY);
+        textArea.setBorder(BorderFactory.createEtchedBorder());
+        textArea.setFont(new Font("Verdana", Font.PLAIN, 14));
+        return textArea;
     }
 
     public JPanel createPanelBottom() 
@@ -82,20 +98,23 @@ public class ComponentCreator extends JFrame
         panelBottom.setBackground(Color.GRAY);
         panelBottom.setSize(10,10);
 
-        labelBottom = createLabel(getShortVersion(), 12, false);
+        labelBottom = createLabel(getShortVersion(), 12, false, "CENTER");
         
         panelBottom.add(labelBottom);
 
         return panelBottom;
     }
     
-    public JLabel createLabel(String text, int size, boolean bold)
+    public JLabel createLabel(String text, int size, boolean bold, String align)
     {
         JLabel label = new JLabel(text);
         if (bold)
             label.setFont(new Font("Verdana", Font.BOLD, size));
         else 
-        label.setFont(new Font("Verdana", Font.PLAIN, size));
+            label.setFont(new Font("Verdana", Font.PLAIN, size));
+
+        if (align.equals("CENTER"))
+            label.setHorizontalAlignment(SwingConstants.CENTER);
         return label;
     }
 
