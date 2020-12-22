@@ -18,15 +18,13 @@ import common.NetworkParams;
 import common.SystemParameters;
 import gui.TrafficLight;
 
-public class ClientUDP 
-{
+public class ClientUDP {
     private final String hostname;
     private int port;
     private byte[] incomingData;
     private NetworkParams params;
 
-    public ClientUDP() throws IOException 
-    {
+    public ClientUDP() throws IOException {
         this.hostname = SystemParameters.getHostname();
         this.port = SystemParameters.getPort();
         this.incomingData = new byte[1024];
@@ -34,8 +32,7 @@ public class ClientUDP
         cliente();
     }
 
-    public NetworkParams receive(DatagramSocket dataSocket) throws IOException, ClassNotFoundException
-    {
+    public NetworkParams receive(DatagramSocket dataSocket) throws IOException, ClassNotFoundException {
         /* Receiving object from server */
         DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
         dataSocket.receive(incomingPacket);
@@ -51,8 +48,7 @@ public class ClientUDP
         return receivedObject;
     }
 
-    public void send(DatagramSocket dataSocket, InetAddress address) throws IOException
-    {
+    public void send(DatagramSocket dataSocket, InetAddress address) throws IOException {
         /* Sending object to server */
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ObjectOutputStream os = new ObjectOutputStream(outputStream);
@@ -64,13 +60,13 @@ public class ClientUDP
         dataSocket.send(sendPacket);
         System.out.println("Datagram send to server: " + sendPacket);
         System.out.println("State send: " + params.getState());
+        params.setOnline();
     }
 
     public void cliente() {
         try {
             TrafficLightClientWindow clientWindow = new TrafficLightClientWindow();
-            while (true) 
-            {
+            while (true) {
                 System.out.println("--- CLIENT ---");
                 InetAddress address = InetAddress.getByName(hostname);
                 System.out.println(address);
@@ -79,10 +75,19 @@ public class ClientUDP
 
                 send(dataSocket, address);
                 NetworkParams receivedObject = receive(dataSocket);
-                
+
                 dataSocket.close();
                 params.setState(receivedObject.getState());
-                updateLight(clientWindow);
+                params.setNumClients(receivedObject.getNumClients());
+                params.setCanChange(receivedObject.getCanChange());
+                System.out.println("Num clients: " + params.getNumClients());
+                System.out.println("Can change " + params.getCanChange());
+
+                if (params.getCanChange() == true) 
+                {
+                    System.out.println("TO NO IF CAN CHANGE TRUE");
+                    updateLight(clientWindow);
+                } 
             }
         } 
         catch (SocketTimeoutException e) 

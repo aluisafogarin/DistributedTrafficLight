@@ -182,7 +182,7 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private void setPanel()
     {
         labelOnlineLights = componentCreator.createLabel("On Traffic Lights", 16, true);
-
+        //JLabel lightsInfos = componentCreator.createLabel(ServerUDP.printLights())
         mainPanel = componentCreator.createPanel(3, 0, 0);
         mainPanel.setBackground(Color.LIGHT_GRAY);
         

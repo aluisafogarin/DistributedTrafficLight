@@ -1,6 +1,8 @@
 package common;
 
 import java.io.Serializable;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 
 public class NetworkParams implements Serializable
 {
@@ -9,12 +11,28 @@ public class NetworkParams implements Serializable
     private boolean online;
     private int state;
     private boolean canChange;
+    private int numClients;
 
     public NetworkParams()
     {
         this.online = false;
         this.state = 3;
         this.canChange = false;
+    }
+
+    public void setNumClients(int numClients)
+    {
+        this.numClients = numClients;
+    }
+
+    public int getNumClients()
+    {
+        return numClients;
+    }
+
+    public boolean getCanChange()
+    {
+        return canChange;
     }
 
     public boolean getStatus()
