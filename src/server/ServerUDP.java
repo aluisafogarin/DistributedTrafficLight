@@ -27,13 +27,15 @@ public class ServerUDP {
     private static DatagramSocket dataSocket;
     private static byte[] incomingData;
     private final long TIME = (1000 * 3);
-    private int numClients = 0;
+    private static int numClients = 0;
     private int readyClients;
-    Thread th;
+    private static ArrayList<Integer> states = new ArrayList<Integer>();
     private ArrayList<NetworkParams> nt = new ArrayList<NetworkParams>();
+    private TrafficLightServerWindow serverWindow;
 
     public ServerUDP() throws SocketException 
     {
+        serverWindow = new TrafficLightServerWindow();
         try 
         {
             ServerUDP.dataSocket = new DatagramSocket(SystemParameters.getPort());
@@ -76,19 +78,17 @@ public class ServerUDP {
                         e.printStackTrace();
                     }
                 }
+
             };
             timer.schedule(task, TIME, TIME);
         }
     }
 
-/*     public void init()
-    {
-        while (true)
-        {
-            
-        }
-    }
- */
+    /*
+     * public void init() { while (true) {
+     * 
+     * } }
+     */
     private static class ClientHandler implements Runnable {
         private final DatagramPacket clientDataSocket;
 
@@ -104,151 +104,66 @@ public class ServerUDP {
             synchronized(this) 
             {
                 System.out.println("run class handler");
-            System.out.println("To numa thread: " + clientDataSocket.toString());
-            try
-            {
-                //NetworkParams receivedObject = receive(clientDataSocket);
+                System.out.println("To numa thread: " + clientDataSocket.toString());
+                try
+                {
+                    //NetworkParams receivedObject = receive(clientDataSocket);
 
-                dataSocket.receive(clientDataSocket);
+                    dataSocket.receive(clientDataSocket);
 
-                byte[] data = clientDataSocket.getData();
+                    byte[] data = clientDataSocket.getData();
 
-                ByteArrayInputStream input = new ByteArrayInputStream(data);
-                ObjectInputStream objectInput = new ObjectInputStream(input);
+                    ByteArrayInputStream input = new ByteArrayInputStream(data);
+                    ObjectInputStream objectInput = new ObjectInputStream(input);
 
-                NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
-              
-                System.out.println("Received from client: " + receivedObject);
-                System.out.println("Current state: " + receivedObject.getState());
+                    NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
                 
-                receivedObject.setOnline();
-                receivedObject.setCanChange(true);
+                    System.out.println("Received from client: " + receivedObject);
+                    System.out.println("Current state: " + receivedObject.getState());
+                    
+                    if (receivedObject.getStatus() == false)
+                    {
+                        receivedObject.setId(numClients);
+                        numClients++;
+                        System.out.println("NUM CLIENTS: " + numClients);
+                        System.out.println("ID DEFINIDO:" + receivedObject.getId());
+                        states.add(0);
+                    }
 
-                receivedObject.setState(changeState(receivedObject.getState()));
-                System.out.println("New state: " + receivedObject.getState());
+                    receivedObject.setOnline();
+                    receivedObject.setCanChange(true);
 
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                ObjectOutputStream os = new ObjectOutputStream(outputStream);
-                os.writeObject(receivedObject);
+                    receivedObject.setState(changeState(receivedObject.getState()));
+                    System.out.println("New state: " + receivedObject.getState());
 
-                byte[] dataOut = outputStream.toByteArray();
-                DatagramPacket sendPacket = 
-                    new DatagramPacket(
-                        dataOut, 
-                        dataOut.length, 
-                        clientDataSocket.getAddress(),
-                        clientDataSocket.getPort());
+                    System.out.println("id: " + receivedObject.getId() + " state: " + receivedObject.getState());
+                    states.set(receivedObject.getId(), receivedObject.getState());
+                    System.out.println("States :" + states);
 
-                dataSocket.send(sendPacket);
-                System.out.println("Send to client: " + dataOut);
-                }
-                catch (IOException e) {
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    ObjectOutputStream os = new ObjectOutputStream(outputStream);
+                    os.writeObject(receivedObject);
+
+                    byte[] dataOut = outputStream.toByteArray();
+                    DatagramPacket sendPacket = 
+                        new DatagramPacket(
+                            dataOut, 
+                            dataOut.length, 
+                            clientDataSocket.getAddress(),
+                            clientDataSocket.getPort());
+
+                    dataSocket.send(sendPacket);
+                    System.out.println("Send to client: " + dataOut);
+                } 
+                catch (IOException e) 
+                {
                     System.out.println(e.getMessage());
-                } catch (ClassNotFoundException e) {
+                } 
+                catch (ClassNotFoundException e) 
+                {
                     System.out.println(e.getMessage());
                 }
             }
-            
-        }
-    
-        public int changeState(int currentState) {
-            int state = 0;
-            System.out.println("Current state: " + currentState);
-            switch (currentState) {
-                case 3:
-                    state = 1;
-                    break;
-                case 2:
-                    state = 3;
-                    break;
-                case 1:
-                    state = 2;
-                    break;
-                default:
-                    state = 3;
-                    break;
-            }
-            System.out.println("Mudei o estado! Agora é: " + state);
-            return state;
-        }
-            
-    }
-
-    public static byte[] getIncommingData() {
-        return incomingData;
-    }
-
-    public NetworkParams receive(DatagramPacket incomingPacket) throws IOException, ClassNotFoundException {
-        dataSocket.receive(incomingPacket);
-
-        byte[] data = incomingPacket.getData();
-
-        ByteArrayInputStream input = new ByteArrayInputStream(data);
-        ObjectInputStream objectInput = new ObjectInputStream(input);
-
-        NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
-        nt.add(receivedObject);
-        System.out.println("Received from client: " + receivedObject);
-        System.out.println("Current state: " + receivedObject.getState());
-        if (receivedObject.getStatus() == false)
-            numClients++;
-        receivedObject.setOnline();
-        receivedObject.setNumClients(numClients);
-        return receivedObject;
-    }
-
-    public boolean server(DatagramPacket incomingPacket) {
-        try {
-            System.out.println("--- SERVER ---");
-            //DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
-
-            /*
-             * InetAddress clientAddress = incomingPacket.getAddress(); int clientPort =
-             * incomingPacket.getPort();
-             */
-            NetworkParams receivedObject = receive(incomingPacket);
-            if (readyClients < numClients) {
-                readyClients++;
-                System.out.println("Ready clients: " + readyClients + " Num clients: " + numClients);
-                receivedObject.setCanChange(false);
-                System.out.println("Ready < Client: " + receivedObject.getCanChange());
-            }
-            if (readyClients == numClients) {
-                receivedObject.setCanChange(true);
-                System.out.println("Ready == Client: " + receivedObject.getCanChange());
-                readyClients--;
-            }
-
-            if (receivedObject.getCanChange() == true)
-                receivedObject.setState(changeState(receivedObject.getState()));
-
-            System.out.println("New state: " + receivedObject.getState());
-
-            send(receivedObject, incomingPacket);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return false;
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-        System.out.println("Num clients " + numClients);
-        return true;
-    }
-
-    public void send(NetworkParams receivedObject, DatagramPacket incomingPacket) throws IOException {
-        /* Sending object to client */
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(outputStream);
-        os.writeObject(receivedObject);
-
-        byte[] dataOut = outputStream.toByteArray();
-        DatagramPacket sendPacket = new DatagramPacket(dataOut, dataOut.length, incomingPacket.getAddress(),
-                incomingPacket.getPort());
-
-        dataSocket.send(sendPacket);
-        System.out.println("Send to client: " + dataOut);
-
     }
 
     public int changeState(int currentState) {
@@ -272,13 +187,114 @@ public class ServerUDP {
         return state;
     }
 
-    public String printLights() {
-        StringBuffer lightStatus = new StringBuffer();
-        lightStatus.append(numClients);
-        lightStatus.append("|");
-        // lightStatus.append(receivedObject.getState());
+}
 
-        return lightStatus.toString();
+public static byte[] getIncommingData() 
+{
+    return incomingData;
+}
+
+public NetworkParams receive(DatagramPacket incomingPacket) throws IOException, ClassNotFoundException {
+    dataSocket.receive(incomingPacket);
+
+    byte[] data = incomingPacket.getData();
+
+    ByteArrayInputStream input = new ByteArrayInputStream(data);
+    ObjectInputStream objectInput = new ObjectInputStream(input);
+
+    NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
+    nt.add(receivedObject);
+    System.out.println("Received from client: " + receivedObject);
+    System.out.println("Current state: " + receivedObject.getState());
+    if (receivedObject.getStatus() == false)
+        numClients++;
+    receivedObject.setOnline();
+    receivedObject.setNumClients(numClients);
+    return receivedObject;
+}
+
+public boolean server(DatagramPacket incomingPacket) {
+    try {
+        System.out.println("--- SERVER ---");
+        // DatagramPacket incomingPacket = new DatagramPacket(incomingData,
+        // incomingData.length);
+
+        /*
+         * InetAddress clientAddress = incomingPacket.getAddress(); int clientPort =
+         * incomingPacket.getPort();
+         */
+        NetworkParams receivedObject = receive(incomingPacket);
+        if (readyClients < numClients) {
+            readyClients++;
+            System.out.println("Ready clients: " + readyClients + " Num clients: " + numClients);
+            receivedObject.setCanChange(false);
+            System.out.println("Ready < Client: " + receivedObject.getCanChange());
+        }
+        if (readyClients == numClients) {
+            receivedObject.setCanChange(true);
+            System.out.println("Ready == Client: " + receivedObject.getCanChange());
+            readyClients--;
+        }
+
+        if (receivedObject.getCanChange() == true)
+            receivedObject.setState(changeState(receivedObject.getState()));
+
+        System.out.println("New state: " + receivedObject.getState());
+
+        send(receivedObject, incomingPacket);
+    } catch (IOException e) {
+        System.out.println(e.getMessage());
+        return false;
+    } catch (ClassNotFoundException e) {
+        System.out.println(e.getMessage());
+        return false;
     }
+    System.out.println("Num clients " + numClients);
+    return true;
+}
 
+public void send(NetworkParams receivedObject, DatagramPacket incomingPacket) throws IOException {
+    /* Sending object to client */
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    ObjectOutputStream os = new ObjectOutputStream(outputStream);
+    os.writeObject(receivedObject);
+
+    byte[] dataOut = outputStream.toByteArray();
+    DatagramPacket sendPacket = new DatagramPacket(dataOut, dataOut.length, incomingPacket.getAddress(),
+            incomingPacket.getPort());
+
+    dataSocket.send(sendPacket);
+    System.out.println("Send to client: " + dataOut);
+
+}
+
+public int changeState(int currentState) {
+    int state = 0;
+    System.out.println("Current state: " + currentState);
+    switch (currentState) {
+        case 3:
+            state = 1;
+            break;
+        case 2:
+            state = 3;
+            break;
+        case 1:
+            state = 2;
+            break;
+        default:
+            state = 3;
+            break;
+    }
+    System.out.println("Mudei o estado! Agora é: " + state);
+    return state;
+}
+
+public String printLights() {
+    StringBuffer lightStatus = new StringBuffer();
+    lightStatus.append(numClients);
+    lightStatus.append("|");
+    // lightStatus.append(receivedObject.getState());
+
+    return lightStatus.toString();
+}
 }

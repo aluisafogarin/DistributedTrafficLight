@@ -12,6 +12,7 @@ public class NetworkParams implements Serializable
     private int state;
     private boolean canChange;
     private int numClients;
+    private int id;
 
     public NetworkParams()
     {
@@ -20,6 +21,16 @@ public class NetworkParams implements Serializable
         this.canChange = false;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+    
     public void setNumClients(int numClients)
     {
         this.numClients = numClients;

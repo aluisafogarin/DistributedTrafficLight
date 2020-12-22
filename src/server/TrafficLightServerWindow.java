@@ -5,19 +5,24 @@ package server;
  */
 public class TrafficLightServerWindow 
 {
-    public static void startGUI()
+    private TrafficLightServerPanel serverWindow;
+
+    public TrafficLightServerWindow() 
     {
         try 
         {
-            TrafficLightServerPanel serverWindow = new TrafficLightServerPanel();
+            this.serverWindow = new TrafficLightServerPanel();
             serverWindow.start();
-        }
-        catch (Exception exception)
+        } 
+        catch (Exception e) 
         {
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             System.exit(1);
         }
     }
-    
+
+    public TrafficLightServerPanel getPanelServer() {
+        return serverWindow;
+    }
 }

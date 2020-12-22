@@ -2,6 +2,8 @@ package server;
 
 import common.Infos;
 import gui.DialogWindow;
+import gui.TrafficLight;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -10,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -42,6 +45,8 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private JMenuItem menuItemClose;
     private JMenuItem menuItemDisclaimer;
     private JMenuItem menuItemHelp;
+
+    private TrafficLight trafficLight;
 
     private static final long serialVersionUID = 1L;
 
@@ -179,10 +184,21 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         this.setJMenuBar(menuBar);
     }
 
+/*     @Override
+    public void paint(Graphics g)
+    {
+        super.paint(g);
+
+        trafficLight = new TrafficLight(g, mainPanel.getSize());
+        trafficLight.drawRectangle();
+        trafficLight.setLightColor(3);
+        trafficLight.drawLights();
+    }  */
+
     private void setPanel()
     {
         labelOnlineLights = componentCreator.createLabel("On Traffic Lights", 16, true);
-        //JLabel lightsInfos = componentCreator.createLabel(ServerUDP.printLights())
+
         mainPanel = componentCreator.createPanel(3, 0, 0);
         mainPanel.setBackground(Color.LIGHT_GRAY);
         

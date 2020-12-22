@@ -8,13 +8,14 @@ import java.util.TimerTask;
 
 public class MainServer 
 {
+
     public static void main(String[] args) 
     {
         start();
     }
 
-    public static void start() {
-        TrafficLightServerWindow.startGUI();
+    public static void start() 
+    {
         try 
         {
             ServerUDP server = new ServerUDP();
@@ -23,17 +24,16 @@ public class MainServer
         catch (SocketException e) 
         {
             System.out.println("Socket error: " + e.getMessage());
-        }
-        catch (IOException e)
+        } 
+        catch (IOException e) 
         {
             System.out.println("IO Error: " + e.getMessage());
         }
     }
 
-    public static void exit()
+    public static void exit() 
     {
         System.exit(0);
     }
-
 
 }

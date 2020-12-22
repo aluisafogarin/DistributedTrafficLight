@@ -17,6 +17,9 @@ import java.nio.ByteBuffer;
 import common.NetworkParams;
 import common.SystemParameters;
 import gui.TrafficLight;
+import server.MainServer;
+import server.TrafficLightServerPanel;
+import server.TrafficLightServerWindow;
 
 public class ClientUDP {
     private final String hostname;
@@ -80,6 +83,7 @@ public class ClientUDP {
                 params.setState(receivedObject.getState());
                 params.setNumClients(receivedObject.getNumClients());
                 params.setCanChange(receivedObject.getCanChange());
+                params.setId(receivedObject.getId());
                 System.out.println("Num clients: " + params.getNumClients());
                 System.out.println("Can change " + params.getCanChange());
 
@@ -109,6 +113,7 @@ public class ClientUDP {
     public void updateLight(TrafficLightClientWindow clientWindow)
     {
         TrafficLightClientPanel clientGUI = clientWindow.getPanelClient();
+        
         clientGUI.setState(params.getState());
         clientGUI.repaint();
     }
