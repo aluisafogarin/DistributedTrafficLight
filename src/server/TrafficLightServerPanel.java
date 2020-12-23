@@ -9,10 +9,8 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,11 +18,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 
 
 import gui.ComponentCreator;
@@ -47,13 +42,11 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
     private JMenuItem menuItemClose;
     private JMenuItem menuItemDisclaimer;
     private JMenuItem menuItemHelp;
-    private JLabel clientId;
-    private JLabel clientState;
-    private JLabel clientIdTitle;
-    private JLabel clientStateTitle;
     private JTextArea clientInfo;
 
-    private TrafficLight trafficLight;
+    private ArrayList<Integer> clientIds = new ArrayList<Integer>();
+    private ArrayList<Integer> clientStates = new ArrayList<Integer>();
+     
 
     private static final long serialVersionUID = 1L;
 
@@ -213,7 +206,7 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
         JPanel conteiner = componentCreator.createPanel(2, 1, 2);
 
         clientInfo = componentCreator.createTextArea();
-        clientInfo.setText("Client ID: 10 - Status: RED");
+        //clientInfo.setText("Client ID: 10 - Status: RED");
         conteiner.add(clientInfo);
         
         mainPanel.add(labelOnlineLights, BorderLayout.NORTH);
@@ -235,5 +228,52 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener
                     exit();
                 }
             });
+    }
+
+    public void updateTrafficLightsInfos(int id, int state)
+    {
+        StringBuffer lightStatus = new StringBuffer();
+        if (!clientIds.contains(id))
+        {
+            System.out.println("ADICIONEI!");
+            clientIds.add(id++);
+            clientStates.add(state);
+            System.out.println(id + state);
+        }
+        else
+        {
+            clientStates.set(id, state);
+            System.out.println("ATUALIZEI!");
+        }
+        
+        System.out.println("RECEBI: " + id +" "+ state);
+        
+        for (int i: clientIds)
+        {
+            lightStatus.append("Semáforo ID: ");
+            lightStatus.append(clientIds.get(i));
+            lightStatus.append(" Estado: ");
+            switch (clientStates.get(i))
+            {
+                case 1:
+                    lightStatus.append("Verde");
+                    break;
+                case 2:
+                    lightStatus.append("Amarelo");
+                    break;
+                case 3:
+                    lightStatus.append("Vermelho");
+                    break;
+                default:
+                    lightStatus.append("Vermelho");
+                    break;
+            }
+            lightStatus.append("\n");
+           //System.out.println("ID: " + i + "State: " + clientStates.get(i));
+        }
+        // 1 - Green, 2 - Yellow, 3 - Red
+        
+        clientInfo.setText(lightStatus.toString());
+        System.out.println(lightStatus); 
     }
 }
