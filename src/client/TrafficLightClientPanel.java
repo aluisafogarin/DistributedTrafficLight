@@ -23,6 +23,7 @@ import gui.ComponentCreator;
  */
 public class TrafficLightClientPanel extends JFrame implements ActionListener
 {
+    private Infos infos = new Infos();
 
     private ComponentCreator componentCreator = new ComponentCreator();
     private JPanel mainPanel;
@@ -89,7 +90,7 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     {
         if (event.getSource() == this.menuItemAbout) 
         {
-            new DialogWindow(this, "Sobre", Infos.getAbout());
+            new DialogWindow(this, "Sobre", infos.getAbout());
         }
 
         if (event.getSource() == this.menuItemClose)
@@ -103,7 +104,7 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         
         if (event.getSource() == this.menuItemHelp) 
         {
-            new DialogWindow(this, "Ajuda" + Infos.getLongVersion(), 
+            new DialogWindow(this, infos.languageInfos.getHelp() + Infos.getLongVersion(), 
                 Infos.getTextFromFile("AjudaCliente.txt"));
         }
     }
@@ -192,13 +193,13 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
      */
     private void setMenus()
     {
-        menuFile = componentCreator.createMenu("File", 'F');
-        menuHelp = componentCreator.createMenu("Help", 'H');
+        menuFile = componentCreator.createMenu(infos.languageInfos.getFile(), 'F');
+        menuHelp = componentCreator.createMenu(infos.languageInfos.getHelp(), 'H'); 
 
-        menuItemAbout = componentCreator.createMenuItem("About", 'A');
-        menuItemClose = componentCreator.createMenuItem("Close", 'X');
-        menuItemDisclaimer = componentCreator.createMenuItem("Disclaimer", 'D');
-        menuItemHelp = componentCreator.createMenuItem("Help", 'H');
+        menuItemAbout = componentCreator.createMenuItem(infos.languageInfos.getAbout(), 'A');
+        menuItemClose = componentCreator.createMenuItem(infos.languageInfos.getExit(), 'X');
+        menuItemDisclaimer = componentCreator.createMenuItem(infos.languageInfos.getDisclaimer(), 'D');
+        menuItemHelp = componentCreator.createMenuItem(infos.languageInfos.getHelp(), 'H');
 
         menuFile.add(menuItemDisclaimer);
         menuFile.add(menuItemClose);
@@ -235,9 +236,9 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent)
                 {
+                    ClientUDP.finish();
                     exit();
                 }
             });
     }
-
 }

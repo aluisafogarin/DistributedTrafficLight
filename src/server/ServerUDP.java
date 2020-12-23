@@ -133,7 +133,6 @@ public class ServerUDP
                     NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
                 
                     System.out.println("Received from client: " + receivedObject);
-                    System.out.println("Current state: " + receivedObject.getState());
                     
                     //Check status and modify the object
                     if (receivedObject.getStatus() == false)

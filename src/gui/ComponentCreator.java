@@ -77,7 +77,6 @@ public class ComponentCreator extends JFrame
                 break;
             case 2: 
                 panel.setLayout(new GridLayout(numRow, numCol));
-                System.out.println(numRow + numCol);
                 break;
             case 3:
                 panel.setLayout(new FlowLayout());

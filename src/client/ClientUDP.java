@@ -54,7 +54,6 @@ public class ClientUDP
 
         NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
         System.out.println("Datagram received from server: " + receivedObject);
-        System.out.println("State received: " + receivedObject.getState());
 
         return receivedObject;
     }
@@ -76,7 +75,6 @@ public class ClientUDP
 
         dataSocket.send(sendPacket);
         System.out.println("Datagram send to server: " + sendPacket);
-        System.out.println("State send: " + params.getState());
         params.setOnline();
     }
 
@@ -93,7 +91,6 @@ public class ClientUDP
                 System.out.println("--- CLIENT ---");
                 DatagramSocket dataSocket = new DatagramSocket();
                 InetAddress address = InetAddress.getByName(hostname);
-                System.out.println(address);
                 //DatagramSocket dataSocket = new DatagramSocket();
                 byte[] incomingData = new byte[1024];
 
@@ -105,12 +102,9 @@ public class ClientUDP
                 params.setNumClients(receivedObject.getNumClients());
                 params.setCanChange(receivedObject.getCanChange());
                 params.setId(receivedObject.getId());
-                System.out.println("Num clients: " + params.getNumClients());
-                System.out.println("Can change " + params.getCanChange());
 
                 if (params.getCanChange() == true) 
                 {
-                    System.out.println("TO NO IF CAN CHANGE TRUE");
                     updateLight(clientWindow);
                 } 
             }
@@ -142,6 +136,16 @@ public class ClientUDP
         
         clientGUI.setState(params.getState());
         clientGUI.repaint();
+    }
+
+    /** 
+     * Set free the port, so it can be used again.
+     * @throws SocketException  Report if there is any problem with the socket connection.
+     */
+    public static void finish() 
+    {
+        System.exit(0);
+        MainClient.exit();
     }
 
 }   

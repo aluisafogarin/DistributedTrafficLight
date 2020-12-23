@@ -45,7 +45,6 @@ public class Infos
         aboutText.append(date + "- ");
         aboutText.append(version + "\n");
         aboutText.append(Authors + "\n" + "\n");
-        System.out.println("GET ABOUT:" + aboutText.toString());
         return aboutText.toString();
     }
 

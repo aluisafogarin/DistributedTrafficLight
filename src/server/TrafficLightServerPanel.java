@@ -85,7 +85,7 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener {
             new DialogWindow(
                 this,
                 "Direitos" + Infos.getLongVersion(),
-                 Infos.getTextFromFile(Infos.DisclaimerFile));
+                 Infos.getTextFromFile(infos.DisclaimerFile));
         }
 
         if (event.getSource() == this.menuItemHelp) 
@@ -93,7 +93,7 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener {
             new DialogWindow(
                 this,
                 "Ajuda" + Infos.getLongVersion(),
-                Infos.getTextFromFile("AjudaServidor.txt"));
+                infos.getTextFromFile("AjudaServidor.txt"));
         }
     }
 
@@ -266,7 +266,6 @@ public class TrafficLightServerPanel extends JFrame implements ActionListener {
         {
             clientIds.add(id++);
             clientStates.add(state);
-            System.out.println(id + state);
         }
         else
         {
