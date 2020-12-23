@@ -22,12 +22,11 @@ import java.util.TimerTask;
 import common.SystemParameters;
 import gui.DialogWindow;
 import gui.TrafficLight;
-
 public class ServerUDP {
     private static DatagramSocket dataSocket;
     private static byte[] incomingData;
     private final long TIME = (1000 * 3);
-    private static int numClients = 0;
+    public static int numClients = 0;
     private int readyClients;
     private static ArrayList<Integer> states = new ArrayList<Integer>();
     private ArrayList<NetworkParams> nt = new ArrayList<NetworkParams>();
@@ -57,10 +56,12 @@ public class ServerUDP {
 
     public void init() 
     {
+
         System.out.println("Execute");
         Timer timer = null;
         if (timer == null) {
             timer = new Timer();
+
             TimerTask task = new TimerTask() 
             {
                 @Override
@@ -68,10 +69,19 @@ public class ServerUDP {
                 {
                     try 
                     {
-                        System.out.println("run time");
+                        System.out.println("Task");
+                        System.out.println("Num clients" + numClients);
                         ClientHandler clientSocket = new ClientHandler();
-
-                        new Thread(clientSocket).start();
+                    
+                        if(numClients == 0 || numClients == 1) {
+                            new Thread(clientSocket).start(); 
+                        }
+                        else {
+                            for (int i = 0; i < numClients; i++)
+                            { 
+                                new Thread(clientSocket).start(); 
+                            }
+                        }
                     } 
                     catch (Exception e) 
                     {
@@ -101,10 +111,11 @@ public class ServerUDP {
         @Override
         public void run() 
         {
+           
             synchronized(this) 
             {
-                System.out.println("run class handler");
-                System.out.println("To numa thread: " + clientDataSocket.toString());
+                /* System.out.println("run class handler");
+                System.out.println("To numa thread: " + clientDataSocket.toString()); */
                 try
                 {
                     //NetworkParams receivedObject = receive(clientDataSocket);
@@ -118,15 +129,13 @@ public class ServerUDP {
 
                     NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
                 
-                    System.out.println("Received from client: " + receivedObject);
-                    System.out.println("Current state: " + receivedObject.getState());
+                   /*  System.out.println("Received from client: " + receivedObject);
+                    System.out.println("Current state: " + receivedObject.getState()); */
                     
                     if (receivedObject.getStatus() == false)
                     {
                         receivedObject.setId(numClients);
                         numClients++;
-                        System.out.println("NUM CLIENTS: " + numClients);
-                        System.out.println("ID DEFINIDO:" + receivedObject.getId());
                         states.add(0);
                     }
 
@@ -134,11 +143,11 @@ public class ServerUDP {
                     receivedObject.setCanChange(true);
 
                     receivedObject.setState(changeState(receivedObject.getState()));
-                    System.out.println("New state: " + receivedObject.getState());
+                    //System.out.println("New state: " + receivedObject.getState());
 
-                    System.out.println("id: " + receivedObject.getId() + " state: " + receivedObject.getState());
+                    //System.out.println("id: " + receivedObject.getId() + " state: " + receivedObject.getState());
                     states.set(receivedObject.getId(), receivedObject.getState());
-                    System.out.println("States :" + states);
+                    //System.out.println("States :" + states);
 
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ObjectOutputStream os = new ObjectOutputStream(outputStream);
@@ -153,7 +162,7 @@ public class ServerUDP {
                             clientDataSocket.getPort());
 
                     dataSocket.send(sendPacket);
-                    System.out.println("Send to client: " + dataOut);
+                    //System.out.println("Send to client: " + dataOut);
                 } 
                 catch (IOException e) 
                 {
@@ -168,7 +177,7 @@ public class ServerUDP {
 
     public int changeState(int currentState) {
         int state = 0;
-        System.out.println("Current state: " + currentState);
+        //System.out.println("Current state: " + currentState);
         switch (currentState) {
             case 3:
                 state = 1;
@@ -183,7 +192,7 @@ public class ServerUDP {
                 state = 3;
                 break;
         }
-        System.out.println("Mudei o estado! Agora é: " + state);
+        //System.out.println("Mudei o estado! Agora é: " + state);
         return state;
     }
 
@@ -204,10 +213,8 @@ public NetworkParams receive(DatagramPacket incomingPacket) throws IOException, 
 
     NetworkParams receivedObject = (NetworkParams) objectInput.readObject();
     nt.add(receivedObject);
-    System.out.println("Received from client: " + receivedObject);
-    System.out.println("Current state: " + receivedObject.getState());
-    if (receivedObject.getStatus() == false)
-        numClients++;
+    /* System.out.println("Received from client: " + receivedObject);
+    System.out.println("Current state: " + receivedObject.getState()); */
     receivedObject.setOnline();
     receivedObject.setNumClients(numClients);
     return receivedObject;
@@ -226,20 +233,20 @@ public boolean server(DatagramPacket incomingPacket) {
         NetworkParams receivedObject = receive(incomingPacket);
         if (readyClients < numClients) {
             readyClients++;
-            System.out.println("Ready clients: " + readyClients + " Num clients: " + numClients);
+            //System.out.println("Ready clients: " + readyClients + " Num clients: " + numClients);
             receivedObject.setCanChange(false);
-            System.out.println("Ready < Client: " + receivedObject.getCanChange());
+            //System.out.println("Ready < Client: " + receivedObject.getCanChange());
         }
         if (readyClients == numClients) {
             receivedObject.setCanChange(true);
-            System.out.println("Ready == Client: " + receivedObject.getCanChange());
+            //System.out.println("Ready == Client: " + receivedObject.getCanChange());
             readyClients--;
         }
 
         if (receivedObject.getCanChange() == true)
             receivedObject.setState(changeState(receivedObject.getState()));
 
-        System.out.println("New state: " + receivedObject.getState());
+        //System.out.println("New state: " + receivedObject.getState());
 
         send(receivedObject, incomingPacket);
     } catch (IOException e) {
@@ -249,7 +256,7 @@ public boolean server(DatagramPacket incomingPacket) {
         System.out.println(e.getMessage());
         return false;
     }
-    System.out.println("Num clients " + numClients);
+    //System.out.println("Num clients " + numClients);
     return true;
 }
 
@@ -264,13 +271,13 @@ public void send(NetworkParams receivedObject, DatagramPacket incomingPacket) th
             incomingPacket.getPort());
 
     dataSocket.send(sendPacket);
-    System.out.println("Send to client: " + dataOut);
+//    System.out.println("Send to client: " + dataOut);
 
 }
 
 public int changeState(int currentState) {
     int state = 0;
-    System.out.println("Current state: " + currentState);
+    //System.out.println("Current state: " + currentState);
     switch (currentState) {
         case 3:
             state = 1;
@@ -285,7 +292,7 @@ public int changeState(int currentState) {
             state = 3;
             break;
     }
-    System.out.println("Mudei o estado! Agora é: " + state);
+    //System.out.println("Mudei o estado! Agora é: " + state);
     return state;
 }
 

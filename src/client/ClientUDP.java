@@ -9,18 +9,11 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.ByteBuffer;
 
 import common.NetworkParams;
 import common.SystemParameters;
-import gui.TrafficLight;
-import server.MainServer;
-import server.TrafficLightServerPanel;
-import server.TrafficLightServerWindow;
-
+import server.ServerUDP;
 public class ClientUDP {
     private final String hostname;
     private int port;
@@ -69,11 +62,14 @@ public class ClientUDP {
     public void cliente() {
         try {
             TrafficLightClientWindow clientWindow = new TrafficLightClientWindow();
-            while (true) {
+
+            while (true) 
+            {
                 System.out.println("--- CLIENT ---");
+                DatagramSocket dataSocket = new DatagramSocket();
                 InetAddress address = InetAddress.getByName(hostname);
                 System.out.println(address);
-                DatagramSocket dataSocket = new DatagramSocket();
+                //DatagramSocket dataSocket = new DatagramSocket();
                 byte[] incomingData = new byte[1024];
 
                 send(dataSocket, address);

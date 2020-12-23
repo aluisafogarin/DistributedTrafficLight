@@ -14,7 +14,6 @@ import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
