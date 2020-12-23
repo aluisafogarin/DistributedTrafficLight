@@ -7,6 +7,9 @@ public class TrafficLightClientWindow
 {
     private TrafficLightClientPanel clientWindow;
 
+    /**
+     * Class constructor, builds the GUI.
+     */
     public TrafficLightClientWindow()
     {
         try 
@@ -22,6 +25,11 @@ public class TrafficLightClientWindow
         }
     }
 
+    
+    /** 
+     * Get panel client so it can be possible to change text.
+     * @return TrafficLightClientPanel client window.
+     */
     public TrafficLightClientPanel getPanelClient()
     {
         return clientWindow;

@@ -6,15 +6,11 @@ import gui.DialogWindow;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -22,9 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import gui.ComponentCreator;
-
 /**
- * Class responsible to the panel of server window
+ * Class responsible to build the panel of server window
  */
 public class TrafficLightClientPanel extends JFrame implements ActionListener
 {
@@ -42,12 +37,14 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
     private JMenuItem menuItemHelp;
 
     private TrafficLight trafficLight;
-    private boolean statusTraffic; 
 
     private int state;
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Class constructor, calls all needed methods.
+     */
     TrafficLightClientPanel() 
     {
         super("Traffic Light Client");
@@ -59,6 +56,10 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         setupWindowsListener();
     }
 
+    
+    /** 
+     * @param g
+     */
     @Override
     public void paint(Graphics g)
     {
@@ -70,6 +71,10 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         trafficLight.drawLights();
     } 
 
+    
+    /** 
+     * @param state
+     */
     public void setState(int state) 
     {
         this.state = state;
@@ -154,20 +159,27 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         }
     }
     
+    /**
+     * Exits the window.
+     */
     public void exit()
     {
         System.exit(0);
     }
 
+    /**
+     * Make components visible.
+     */
     public void start() 
     {
         this.setVisible(true);
     }
 
+    /**
+     * Set window specifications.
+     */
     private void setWindow() 
     {
-        /* this.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2),
-                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5)); */
         this.setSize(250, 350);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -175,6 +187,9 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         this.setResizable(false);
     }
 
+    /**
+     * Set window menu bar. 
+     */
     private void setMenus()
     {
         menuFile = componentCreator.createMenu("File", 'F');
@@ -198,6 +213,9 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         this.setJMenuBar(menuBar);
     }
 
+    /**
+     * Set panel.
+     */
     private void setPanel()
     {
         mainPanel = componentCreator.createPanel(1, 1, 1);
@@ -207,6 +225,9 @@ public class TrafficLightClientPanel extends JFrame implements ActionListener
         this.add(panelBottom, BorderLayout.SOUTH);
     }
 
+    /**
+     * Set listener when window is closed.
+     */
     private void setupWindowsListener()
     {
         this.addWindowListener(new java.awt.event.WindowAdapter()

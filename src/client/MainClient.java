@@ -3,13 +3,24 @@ package client;
 import java.io.IOException;
 import java.net.SocketException;
 
+/**
+ * Main class of client.
+ */
 public class MainClient 
 {
+    
+    /** 
+     * Main method, start's UDP client.
+     * @param args
+     */
     public static void main(String[] args) 
     {
        start();
     }
 
+    /**
+     * Start's client connection.
+     */
     public static void start()
     {
        
@@ -27,6 +38,9 @@ public class MainClient
         }
     }
 
+    /**
+     * Closes the connection.
+     */
     public static void exit()
     {
         System.exit(0);

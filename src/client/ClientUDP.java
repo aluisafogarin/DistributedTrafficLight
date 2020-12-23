@@ -1,6 +1,5 @@
 package client;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,14 +12,22 @@ import java.net.SocketTimeoutException;
 
 import common.NetworkParams;
 import common.SystemParameters;
-import server.ServerUDP;
-public class ClientUDP {
+/**
+ * Class responsible to receive and send messages to the server. 
+ */
+public class ClientUDP 
+{
     private final String hostname;
     private int port;
     private byte[] incomingData;
     private NetworkParams params;
 
-    public ClientUDP() throws IOException {
+    /**
+     * Class constructor.
+     * @throws IOException Throws IO Exception.
+     */
+    public ClientUDP() throws IOException 
+    {
         this.hostname = SystemParameters.getHostname();
         this.port = SystemParameters.getPort();
         this.incomingData = new byte[1024];
@@ -28,8 +35,16 @@ public class ClientUDP {
         cliente();
     }
 
-    public NetworkParams receive(DatagramSocket dataSocket) throws IOException, ClassNotFoundException {
-        /* Receiving object from server */
+    
+    /** 
+     * Receive object from server.
+     * @param dataSocket DatagramSocket 
+     * @return NetworkParams Object 
+     * @throws IOException Throws IO Exception.
+     * @throws ClassNotFoundException If NetworkParams can't be found.
+     */
+    public NetworkParams receive(DatagramSocket dataSocket) throws IOException, ClassNotFoundException 
+    {
         DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
         dataSocket.receive(incomingPacket);
 
@@ -44,8 +59,14 @@ public class ClientUDP {
         return receivedObject;
     }
 
+    
+    /** 
+     * Send object to server.
+     * @param dataSocket DatagramSocket.
+     * @param address Address of the server. 
+     * @throws IOException Throws IO Exception.
+     */
     public void send(DatagramSocket dataSocket, InetAddress address) throws IOException {
-        /* Sending object to server */
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ObjectOutputStream os = new ObjectOutputStream(outputStream);
         os.writeObject(params);
@@ -59,7 +80,11 @@ public class ClientUDP {
         params.setOnline();
     }
 
-    public void cliente() {
+    /**
+     * Manages when send and receives messages from server.
+     */
+    public void cliente() 
+    {
         try {
             TrafficLightClientWindow clientWindow = new TrafficLightClientWindow();
 
@@ -106,6 +131,11 @@ public class ClientUDP {
         }
     }
 
+    
+    /** 
+     * Change which light is on.
+     * @param clientWindow Object from client window
+     */
     public void updateLight(TrafficLightClientWindow clientWindow)
     {
         TrafficLightClientPanel clientGUI = clientWindow.getPanelClient();

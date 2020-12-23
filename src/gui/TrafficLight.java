@@ -1,48 +1,40 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
+/**
+ * Creates traffic light draw.
+ */
 public class TrafficLight extends JFrame 
 {
     private static final long serialVersionUID = 1L;
     private Graphics2D canvas;
     private Dimension dimensionPanel;
 
+    /**
+     * Constructor of the graphic traffic light.
+     * @param g 
+     * @param dimension dimension of jpanel.
+     */
     public TrafficLight(Graphics g, Dimension dimension) 
     {
         this.canvas = (Graphics2D) g;
         this.dimensionPanel = dimension;
     }
 
+    /**
+     * Draw the black rectangle
+     */
     public void drawRectangle() 
     {
-        int widthPanel = (int) dimensionPanel.getWidth();
-        int heightPanel = (int) dimensionPanel.getHeight();
-
-        /*
-         * int xPoint = (int) (widthPanel / 3); int yPoint = (int) (heightPanel * .33);
-         */
         int xPoint = 78;
         int yPoint = 87;
 
-        /*
-         * int width = (int) (widthPanel * .4); int height = (int) (heightPanel * .7);
-         */
         int width = 100;
         int height = 200;
 
@@ -55,6 +47,9 @@ public class TrafficLight extends JFrame
 
     }
 
+    /**
+     * Draw light circles
+     */
     public void drawLights()
     {
         canvas.setColor(Color.GREEN);
@@ -67,6 +62,11 @@ public class TrafficLight extends JFrame
         canvas.drawOval(103, 224, 50, 50);
     }
 
+    
+    /** 
+     * Fill light collor
+     * @param state 1 = Green, 2 = Yellow, 3 = Red
+     */
     public void setLightColor(int state)
     {
         switch(state)

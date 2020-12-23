@@ -48,7 +48,7 @@ public class DialogWindow extends JDialog implements ActionListener {
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setViewportView(display);
         scroll.setBackground(Color.WHITE);
-        scroll.setBorder(new TitledBorder(new LineBorder(Color.BLACK), Infos.sysName));
+        scroll.setBorder(new TitledBorder(new LineBorder(Color.BLACK), Infos.sysServerName));
 
         add(scroll, BorderLayout.CENTER);
 

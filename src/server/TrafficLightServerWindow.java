@@ -22,7 +22,12 @@ public class TrafficLightServerWindow
         }
     }
 
-    public TrafficLightServerPanel getPanelServer() {
+    /**
+     * Get the panel from server window.
+     * @return server window panel.
+     */
+    public TrafficLightServerPanel getPanelServer() 
+    {
         return serverWindow;
     }
 }

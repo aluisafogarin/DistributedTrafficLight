@@ -2,46 +2,37 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;  
-
 import java.awt.GridLayout;
+import java.awt.Font;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-
+/**
+ * Component creator is a class to make it easier to create components in both server and client GUI.
+ */
 public class ComponentCreator extends JFrame
 {
 
-    private JPanel mainPanel;
     private JPanel panelBottom;
-
     private JLabel labelBottom;
-    private JLabel labelOnlineLights;
-    private JMenu menuFile;
-    private JMenu menuHelp;
-    private JMenuBar menuBar;
-    private JMenuItem menuItemAbout;
-    private JMenuItem menuItemClose;
-    private JMenuItem menuItemDisclaimer;
-    private JMenuItem menuItemHelp;
-
-    private Color foreground;
-    private Color background;
 
     private static final long serialVersionUID = 1L;
-    private static String shortVersion = "Traffic Light Controler";
+    private static String shortVersion = "Controlador de Semáforos";
 
+    /** 
+     * Creates menu
+     * @param text text to menu
+     * @param shortcut shortcut to menu button
+     * @return JMenu object to be build.
+     */
     public JMenu createMenu(String text, char shortcut)
     {
         JMenu menu = new JMenu(text);
@@ -49,8 +40,13 @@ public class ComponentCreator extends JFrame
 
         return menu;
     }
-
-
+    
+    /** 
+     * Creates menu item
+     * @param text text on menu item
+     * @param shortcut shortcut to menu button
+     * @return JMenuItem object to be build.
+     */
     public JMenuItem createMenuItem(String text, char shortcut)
     {
         JMenuItem menuItem = new JMenuItem(text);
@@ -60,6 +56,14 @@ public class ComponentCreator extends JFrame
     }
 
 
+    
+    /** 
+     * Creates JPanel
+     * @param typeLayout type of panel layout
+     * @param numRow number of rows of layout
+     * @param numCol number of columns of layout
+     * @return JPanel object to be build.
+     */
     public JPanel createPanel(int typeLayout, int numRow, int numCol)
     {
         // 1 = BorderLayout,  2 = GridLayout, 3 = FlowLayout,
@@ -83,6 +87,11 @@ public class ComponentCreator extends JFrame
         return panel;
     }
 
+    
+    /** 
+     * Creates text area
+     * @return JTextArea object to be build.
+     */
     public JTextArea createTextArea()
     {
         JTextArea textArea = new JTextArea();
@@ -92,6 +101,11 @@ public class ComponentCreator extends JFrame
         return textArea;
     }
 
+    
+    /** 
+     * Creates bottom panel
+     * @return JPanel object to be build.
+     */
     public JPanel createPanelBottom() 
     {   
         panelBottom = new JPanel();
@@ -105,6 +119,15 @@ public class ComponentCreator extends JFrame
         return panelBottom;
     }
     
+    
+    /** 
+     * Creates label
+     * @param text text to be displayed
+     * @param size font size
+     * @param bold true = bold, false = regular
+     * @param align alignment based on swing constants
+     * @return JLabel object to be build.
+     */
     public JLabel createLabel(String text, int size, boolean bold, String align)
     {
         JLabel label = new JLabel(text);
@@ -118,6 +141,11 @@ public class ComponentCreator extends JFrame
         return label;
     }
 
+    
+    /** 
+     * Get short version
+     * @return String object to be build.
+     */
     public String getShortVersion()
     {
         return shortVersion;
